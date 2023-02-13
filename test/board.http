@@ -1,0 +1,12 @@
+@baseUrl = http://localhost:3000
+
+###
+GET {{baseUrl}}/boards
+
+###
+POST {{baseUrl}}/boards
+
+{
+  "title": "Board 1",
+  "description": "Description 1"
+}
