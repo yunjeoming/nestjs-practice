@@ -1,4 +1,4 @@
-import { Controller, ValidationPipe } from '@nestjs/common';
+import { Controller, ParseIntPipe, ValidationPipe } from '@nestjs/common';
 import {
   Param,
   Body,
@@ -8,7 +8,7 @@ import {
   Patch,
   UsePipes,
 } from '@nestjs/common/decorators';
-import { BoardStatus } from './board.model';
+import { BoardStatus } from './board-status.enum';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
@@ -18,13 +18,13 @@ export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
   @Get()
-  getAllboard() {
+  getAllboards() {
     return this.boardsService.getAllBoards();
   }
 
-  /**
-   * ValidationPipe: nest의 builtIn pipe
-   */
+  // /**
+  //  * ValidationPipe: nest의 builtIn pipe
+  //  */
   @Post()
   @UsePipes(ValidationPipe)
   createBoard(@Body() createBoardDto: CreateBoardDto) {
@@ -33,18 +33,19 @@ export class BoardsController {
   }
 
   @Get('/:id')
-  getBoardById(@Param('id') id: string) {
+  getBoardById(@Param('id') id: number) {
     return this.boardsService.getBoardById(id);
   }
 
+  // ParseIntPipe: id가 int로 들어오는지 잘 확인
   @Delete('/:id')
-  deleteBoard(@Param('id') id: string) {
+  deleteBoard(@Param('id', ParseIntPipe) id: number) {
     return this.boardsService.deleteBoard(id);
   }
 
   @Patch('/:id/status')
   updateBoardStatus(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body('status', BoardStatusValidationPipe) status: BoardStatus,
   ) {
     return this.boardsService.updateBoardStatus(id, status);
