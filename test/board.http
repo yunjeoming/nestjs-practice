@@ -5,6 +5,7 @@ GET {{baseUrl}}/boards
 
 ###
 POST {{baseUrl}}/boards
+Content-Type: application/json
 
 {
   "title": "Board 1",
