@@ -6,6 +6,7 @@ GET {{baseUrl}}/boards
 ###
 POST {{baseUrl}}/boards
 Content-Type: application/json
+Authorization: Bearer {token}
 
 {
   "title": "Board 1",

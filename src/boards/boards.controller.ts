@@ -14,6 +14,8 @@ import {
   UsePipes,
 } from '@nestjs/common/decorators';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
 import { BoardStatus } from './board-status.enum';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -25,8 +27,8 @@ export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
   @Get()
-  getAllboards() {
-    return this.boardsService.getAllBoards();
+  getAllboards(@GetUser() user: User) {
+    return this.boardsService.getAllBoards(user);
   }
 
   // /**
@@ -34,9 +36,9 @@ export class BoardsController {
   //  */
   @Post()
   @UsePipes(ValidationPipe)
-  createBoard(@Body() createBoardDto: CreateBoardDto) {
+  createBoard(@Body() createBoardDto: CreateBoardDto, @GetUser() user: User) {
     // @Body() body: request body를 전부 가져온다.
-    return this.boardsService.createBoard(createBoardDto);
+    return this.boardsService.createBoard(createBoardDto, user);
   }
 
   @Get('/:id')

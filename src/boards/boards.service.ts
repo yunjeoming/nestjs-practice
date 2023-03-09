@@ -3,6 +3,7 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BoardStatus } from './board-status.enum';
+import { User } from 'src/auth/user.entity';
 
 /**
  * pipe 유효성 체크
@@ -16,12 +17,17 @@ export class BoardsService {
     private boardRepository: BoardRepository,
   ) {}
 
-  createBoard(createBoardDto: CreateBoardDto) {
-    return this.boardRepository.createBoard(createBoardDto);
+  createBoard(createBoardDto: CreateBoardDto, user: User) {
+    return this.boardRepository.createBoard(createBoardDto, user);
   }
 
-  async getAllBoards() {
-    return this.boardRepository.find();
+  async getAllBoards(user: User) {
+    const query = this.boardRepository.createQueryBuilder('board');
+
+    query.where('board.userId = :uesrId', { userId: user.id });
+
+    const boards = await query.getMany();
+    return boards;
   }
 
   async getBoardById(id: number) {
