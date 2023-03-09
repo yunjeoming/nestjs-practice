@@ -1,4 +1,9 @@
-import { Controller, ParseIntPipe, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  ParseIntPipe,
+  ValidationPipe,
+  UseGuards,
+} from '@nestjs/common';
 import {
   Param,
   Body,
@@ -8,12 +13,14 @@ import {
   Patch,
   UsePipes,
 } from '@nestjs/common/decorators';
+import { AuthGuard } from '@nestjs/passport';
 import { BoardStatus } from './board-status.enum';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
 
 @Controller('boards')
+@UseGuards(AuthGuard())
 export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
