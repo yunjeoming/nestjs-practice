@@ -1,0 +1,39 @@
+@baseUrl = http://localhost:3000
+
+###
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+Accept: */*
+
+{
+  "username": "john234",
+  "password": "1234"
+}
+
+###
+# @name signin
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+Accept: */*
+
+{
+  "username": "john234",
+  "password": "1234"
+}
+
+###
+# 위의 signin시 자동 부여
+@token = {{signin.response.body.$.accessToken}}
+
+###
+GET {{baseUrl}}/boards
+
+###
+POST {{baseUrl}}/boards
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "This is 234",
+  "description": "Description 1"
+}
